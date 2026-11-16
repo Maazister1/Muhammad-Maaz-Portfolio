@@ -430,11 +430,11 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
         <span class="script">lets build something</span>
         <h2>Always curious about<br>how things work</h2>
         <form class="form" id="cform" novalidate>
-          <input id="cemail" type="email" placeholder="Enter your email" aria-label="Your email">
+          <input id="cemail" type="email" placeholder="Enter your email to connect" aria-label="Your email">
           <button type="submit">Lets Connect</button>
         </form>
         <div class="msg" id="cmsg" aria-live="polite"></div>
-        <div class="song"><div class="cv" id="songcv"></div><div id="ytp" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;overflow:hidden"></div><div class="sinfo"><b id="songt">Now Playing</b><small id="songa">On YouTube</small><br><span class="pv">Preview</span></div><a id="play" class="playbtn" href="https://www.youtube.com/watch?v=3YxaaGgTQYM&amp;t=58s" target="_blank" rel="noopener" aria-label="Play Timeless on Spotify"></a></div>
+        <div class="song"><div class="cv" id="songcv"></div><div id="ytp" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;overflow:hidden"></div><div class="sinfo"><b id="songt">Now Playing</b><small id="songa">On YouTube</small><br><span class="pv">Preview</span></div><a id="play" class="playbtn" href="https://www.youtube.com/watch?v=rXLcHtVbtJE&amp;t=19s" target="_blank" rel="noopener" aria-label="Play Timeless on Spotify"></a></div>
       </div>
       <div class="cfoot">
         <div class="soc"><a class="li" href="https://www.linkedin.com/in/muhammad-maaz-arjumand-315021206/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="16" height="16" fill="#fff" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.5c0-1.3-.02-3-1.83-3-1.83 0-2.1 1.43-2.1 2.9V21H9z"/></svg></a><a class="gm" href="mailto:maazfarooqui619@gmail.com" target="_blank" rel="noopener" aria-label="Email maazfarooqui619@gmail.com"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="#4285F4" d="M2 7v11a1.5 1.5 0 0 0 1.5 1.5H6V10.2z"/><path fill="#34A853" d="M18 10.2v9.3h2.5A1.5 1.5 0 0 0 22 18V7z"/><path fill="#EA4335" d="M6 19.5v-9.3l6 4.3 6-4.3v9.3h0V6.4l-6 4.4-6-4.4z"/><path fill="#FBBC04" d="M18 6.4v3.8l4-3.2V5.9c0-1.4-1.6-2.2-2.7-1.4z"/><path fill="#C5221F" d="M2 5.9V7l4 3.2V6.4L4.7 4.5C3.6 3.7 2 4.5 2 5.9z"/></svg></a></div>
@@ -470,8 +470,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
    Paste the YouTube video ID of the song between the quotes below.
    Example: for https://www.youtube.com/watch?v=ABC123xyz the ID is ABC123xyz
    Leave it empty to make the play button open Spotify instead. */
-var YT_ID = "3YxaaGgTQYM";
-var YT_START = 58; /* start time in seconds (0:58) */
+var YT_ID = "rXLcHtVbtJE";
+var YT_START = 19; /* start time in seconds (0:19) */
 (function(){
   var btn=document.getElementById('play'), cv=document.getElementById('songcv');
   if(!YT_ID||!btn) return;
@@ -504,16 +504,16 @@ var YT_START = 58; /* start time in seconds (0:58) */
   tick();setInterval(tick,1000);
   document.getElementById('cform').addEventListener('submit',function(e){
     e.preventDefault();
-    var f=this,btn=f.querySelector('button'),v=document.getElementById('cemail').value.trim(),m=document.getElementById('cmsg');
+    var v=document.getElementById('cemail').value.trim(),m=document.getElementById('cmsg');
     if(!/^\S+@\S+\.\S+$/.test(v)){m.textContent='Please enter a valid email address.';return}
-    btn.disabled=true;btn.textContent='Sending...';
-    fetch('https://formsubmit.co/ajax/maazfarooqui619@gmail.com',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify({email:v,_replyto:v,_subject:'New contact from your portfolio',message:'Someone wants to connect with you from your portfolio website. Their email: '+v,_template:'table',_captcha:'false'})})
-    .then(function(r){return r.json()}).then(function(d){
-      if(d&&(d.success===true||d.success==='true')){m.textContent='Thanks! Your email reached me, I\'ll get back to you soon.';f.reset()}
-      else throw new Error('fail');
-    }).catch(function(){m.innerHTML='Could not send right now. Email me directly at <a href="mailto:maazfarooqui619@gmail.com" style="text-decoration:underline">maazfarooqui619@gmail.com</a>';})
-    .finally(function(){btn.disabled=false;btn.textContent='Lets Connect'});
+    var to='maazfarooqui619@gmail.com',su='Let\'s connect',bd='Hi Maaz,\n\nI came across your portfolio and would love to connect.\n\n';
+    var E=encodeURIComponent,dom=v.split('@')[1].toLowerCase(),url,name;
+    if(/^(gmail|googlemail)\./.test(dom)){url='https://mail.google.com/mail/?view=cm&fs=1&to='+E(to)+'&su='+E(su)+'&body='+E(bd);name='Gmail'}
+    else if(/^(outlook|hotmail|live|msn)\./.test(dom)){url='https://outlook.live.com/mail/0/deeplink/compose?to='+E(to)+'&subject='+E(su)+'&body='+E(bd);name='Outlook'}
+    else if(/^(yahoo|ymail)\./.test(dom)){url='https://compose.mail.yahoo.com/?to='+E(to)+'&subject='+E(su)+'&body='+E(bd);name='Yahoo Mail'}
+    else {url='mailto:'+to+'?subject='+E(su)+'&body='+E(bd);name='your email app'}
+    var a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove();
+    m.textContent='Opening '+name+' with a message ready for me. Just hit send!';
   });
   
 })();
