@@ -214,13 +214,13 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .song{display:flex;align-items:center;gap:10px;width:280px;max-width:100%;background:#1c1c1c;border-radius:8px;padding:8px;margin-top:6px;text-align:left}
 .song{position:relative}
 .song .cv{background-size:cover!important;background-position:center!important;width:64px;height:64px;border-radius:4px;flex:none;background:linear-gradient(135deg,#dc3545,#1c1c1c)}
-.sinfo{min-width:0}
+.sinfo{min-width:0;flex:1}
 .song b{display:block;font:700 15px/1.2 var(--body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .song small{color:#9a9a9a;font-size:12px}
 .song .pv{display:inline-block;margin-top:4px;font-size:10px;background:#555;padding:1px 5px;border-radius:2px}
-.song .playbtn{margin-left:auto;width:34px;height:34px;border-radius:50%;border:0;background:#fff;cursor:pointer;display:grid;place-items:center}
+.song .playbtn{flex:none;margin-left:auto;width:36px;height:36px;min-width:36px;border-radius:50%;border:0;background:#fff;cursor:pointer;display:grid;place-items:center}
 .song .playbtn::after{content:"";border-left:11px solid #111;border-top:7px solid transparent;border-bottom:7px solid transparent;margin-left:3px}
-.song .playbtn.on::after{border:0;width:10px;height:12px;margin:0;background:linear-gradient(90deg,#111 35%,transparent 35% 65%,#111 65%)}
+.song .playbtn.on::after{border:0;width:12px;height:14px;margin:0;background:linear-gradient(90deg,#111 0 35%,transparent 35% 65%,#111 65% 100%)}
 .cfoot{position:relative;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:70px;padding:0 44px}
 .soc{display:flex;gap:10px}
 .soc a{width:30px;height:30px;display:grid;place-items:center;border-radius:3px;font:800 15px/1 var(--body)}
@@ -504,11 +504,16 @@ var YT_START = 58; /* start time in seconds (0:58) */
   tick();setInterval(tick,1000);
   document.getElementById('cform').addEventListener('submit',function(e){
     e.preventDefault();
-    var v=document.getElementById('cemail').value.trim(),m=document.getElementById('cmsg');
+    var f=this,btn=f.querySelector('button'),v=document.getElementById('cemail').value.trim(),m=document.getElementById('cmsg');
     if(!/^\S+@\S+\.\S+$/.test(v)){m.textContent='Please enter a valid email address.';return}
-    var mail='mailto:maazfarooqui619@gmail.com?subject='+encodeURIComponent('New contact from portfolio')+'&body='+encodeURIComponent('Hi Maaz,\n\nI found your portfolio and would like to connect.\n\nMy email: '+v+'\n');
-    var a=document.createElement('a');a.href=mail;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove();
-    m.textContent='Thanks! Your mail app is opening, just hit send and I\'ll get back to you soon.';
+    btn.disabled=true;btn.textContent='Sending...';
+    fetch('https://formsubmit.co/ajax/maazfarooqui619@gmail.com',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({email:v,_replyto:v,_subject:'New contact from your portfolio',message:'Someone wants to connect with you from your portfolio website. Their email: '+v,_template:'table',_captcha:'false'})})
+    .then(function(r){return r.json()}).then(function(d){
+      if(d&&(d.success===true||d.success==='true')){m.textContent='Thanks! Your email reached me, I\'ll get back to you soon.';f.reset()}
+      else throw new Error('fail');
+    }).catch(function(){m.innerHTML='Could not send right now. Email me directly at <a href="mailto:maazfarooqui619@gmail.com" style="text-decoration:underline">maazfarooqui619@gmail.com</a>';})
+    .finally(function(){btn.disabled=false;btn.textContent='Lets Connect'});
   });
   
 })();
